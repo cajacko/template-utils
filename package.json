@@ -1,5 +1,5 @@
 {
-  "name": "template-utils",
+  "name": "@cajacko/template-utils",
   "version": "0.1.0",
   "main": "index.js",
   "repository": "git@github.com:cajacko/template-utils.git",
