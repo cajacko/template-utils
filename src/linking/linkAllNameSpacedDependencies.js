@@ -11,21 +11,12 @@ import { isGitRepo } from '../git';
 import runCommand from '../runCommand';
 import isDirNPMPackage from '../conditionals/isDirNPMPackage';
 
-// Look at all @cajacko packages in this project repo
-// For each one ask for location of repo
-// For each of these do the same
-// Then have linkPackages = { '@cajacko/templates': '/path/to/...', ... }
-//
-// For each package run yarn link
-// For each package look at each @cajacko package and link it
-//
-// cd projectDir && yarn link @cajacko/template
-
 const linkAllNameSpacedDependencies = (nameSpace, startingDir) => {
   const packagesToLinkByDir = {};
 
   return getLocalSettings('localNPMPackagePaths')
-    .then((localNPMPackagePaths) => {
+    .then((localNPMPackagePathsArg) => {
+      const localNPMPackagePaths = localNPMPackagePathsArg || {};
       const allPackagesToLink = {};
       const addedLinkPackagesFrom = [];
 
@@ -52,20 +43,23 @@ const linkAllNameSpacedDependencies = (nameSpace, startingDir) => {
                   type: 'path',
                   message: `Enter the absolute path to the local version of ${packageName}`,
                   validate: path =>
-                    pathExists(path).then(() =>
-                      Promise.all([
-                        isGitRepo(path),
-                        isDirNPMPackage(path, packageName),
-                      ])),
-                }).then(() =>
-                  setLocalSettings(packagePath, [
+                    pathExists(path)
+                      .then(() =>
+                        Promise.all([
+                          isGitRepo(path),
+                          isDirNPMPackage(path, packageName),
+                        ]))
+                      .then(() => true)
+                      .catch(({ message }) => message),
+                }).then(newPackagePath =>
+                  setLocalSettings(newPackagePath, [
                     'localNPMPackagePaths',
                     packageName,
-                  ]));
+                  ]).then(() => newPackagePath));
               }
 
-              return promise.then(() => {
-                allPackagesToLink[packageName] = packagePath;
+              return promise.then((finalPackagePath) => {
+                allPackagesToLink[packageName] = finalPackagePath;
               });
             };
 
@@ -74,7 +68,7 @@ const linkAllNameSpacedDependencies = (nameSpace, startingDir) => {
 
               if (!packageName) return Promise.resolve();
 
-              return getPackageToLinkPath(packageName);
+              return getPackageToLinkPath(packageName).then(() => loop(i + 1));
             };
 
             return loop();
