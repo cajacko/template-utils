@@ -1,5 +1,5 @@
 import linkAllNameSpacedDependencies from './linking/linkAllNameSpacedDependencies';
-import unlinkAllNameSpacedDependencies from './linking/linkAllNameSpacedDependencies';
+import unlinkAllNameSpacedDependencies from './linking/unlinkAllNameSpacedDependencies';
 import runCommandInLocalNameSpacedModules from './runCommandInLocalNameSpacedModules';
 import runCommand from './runCommand';
 
