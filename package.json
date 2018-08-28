@@ -1,6 +1,6 @@
 {
   "name": "@cajacko/template-utils",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "main": "src/main.js",
   "repository": "git@github.com:cajacko/template-utils.git",
