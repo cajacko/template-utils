@@ -17,9 +17,9 @@ const linkEachPackageByDir = (packagesToLinkByDir, unlink = false) => {
     });
 
     const dirPromise = Promise.all(dirPromises).then(() => {
-      if (!unlink) return Promise.resolve();
+      if (unlink) return runCommand('yarn install', packageDir);
 
-      return runCommand('yarn install', packageDir);
+      return Promise.resolve();
     });
 
     linkEachPackagePromises.push(dirPromise);
