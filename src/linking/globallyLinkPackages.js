@@ -2,11 +2,13 @@
 
 import runCommand from '../runCommand';
 
-const globallLinkPackages = (allPackagesToLink) => {
+const globallLinkPackages = (allPackagesToLink, unlink = false) => {
   const linkPackageGlobally = (packageName) => {
     const packageDir = allPackagesToLink[packageName];
 
-    return runCommand('yarn link', packageDir);
+    const command = unlink ? 'yarn unlink' : 'yarn link';
+
+    return runCommand(command, packageDir);
   };
 
   const linkGloballyPromises = [];

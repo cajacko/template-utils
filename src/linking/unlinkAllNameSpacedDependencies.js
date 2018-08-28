@@ -1,13 +1,10 @@
 // @flow
 
-import runCommandOnEachPackageToLink from './runCommandOnEachPackageToLink';
+import linkEachPackageByDir from './linkEachPackageByDir';
 import getAllNameSpacedPackagesToLink from './getAllNameSpacedPackagesToLink';
 
-const linkAllNameSpacedDependencies = (nameSpace, startingDir) =>
+const unlinkAllNameSpacedDependencies = (nameSpace, startingDir) =>
   getAllNameSpacedPackagesToLink(nameSpace, startingDir).then(({ packagesToLinkByDir }) =>
-    runCommandOnEachPackageToLink(
-      packagesToLinkByDir,
-      packageName => `yarn unlink ${packageName}`,
-    ));
+    linkEachPackageByDir(packagesToLinkByDir, true));
 
-export default linkAllNameSpacedDependencies;
+export default unlinkAllNameSpacedDependencies;
