@@ -38,10 +38,11 @@ const git = {
 
     return g.add('-A').then(() => g.commit(message));
   },
-  push: (dir, remote = 'origin') =>
-    simpleGit(dir)
-      .push(remote)
-      .pushTags(remote),
+  push: (dir, remote = 'origin') => {
+    const g = simpleGit(dir);
+
+    return g.push(remote).then(() => g.pushTags(remote));
+  },
   tag: (dir, tag, message) => simpleGit(dir).addAnnotatedTag(tag, message),
 };
 
