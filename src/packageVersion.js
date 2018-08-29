@@ -14,7 +14,7 @@ export const askForNewPackageVersion = dir =>
       validate: (input) => {
         if (!semver.valid(input)) return 'Value is not a valid semver';
 
-        if (semver.gt(version, input)) {
+        if (version === input || semver.gt(version, input)) {
           return 'New version must be higher than the previous';
         }
 
