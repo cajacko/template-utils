@@ -33,9 +33,16 @@ const git = {
       })
       // .log(`${tag}..HEAD`)
       .then(logs => logs.all),
-  commit: (dir, message) => Promise.resolve(),
-  push: dir => Promise.resolve(),
-  tag: (dir, tag, message) => Promise.resolve(),
+  commit: (dir, message) => {
+    const g = simpleGit(dir);
+
+    return g.add('-A').then(() => g.commit(message));
+  },
+  push: (dir, remote = 'origin') =>
+    simpleGit(dir)
+      .push(remote)
+      .pushTags(remote),
+  tag: (dir, tag, message) => simpleGit(dir).addAnnotatedTag(tag, message),
 };
 
 export default git;
