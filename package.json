@@ -1,6 +1,6 @@
 {
   "name": "@cajacko/template-utils",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": false,
   "main": "lib/main.js",
   "scripts": {
