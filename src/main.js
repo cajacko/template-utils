@@ -6,8 +6,6 @@ import { set as setSettings, get as getSettings } from './settings';
 import getShouldUpdatePackage from './getShouldUpdatePackage';
 import git from './git';
 
-console.log('example');
-
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
