@@ -2,6 +2,7 @@
 
 import { join } from 'path';
 import { writeJSON } from 'fs-extra';
+import semver from 'semver';
 import { getPackageJSONFromDir } from './packageJSON';
 import ask from './ask';
 
@@ -10,7 +11,15 @@ export const askForNewPackageVersion = dir =>
     ask({
       type: 'input',
       message: `Enter the new version for ${name}. Last version: ${version}`,
-      validate: () => true,
+      validate: (input) => {
+        if (!semver.valid(input)) return 'Value is not a valid semver';
+
+        if (semver.gt(version, input)) {
+          return 'New version must be higher than the previous';
+        }
+
+        return true;
+      },
     }));
 
 export const setPackageVersion = (dir, version) =>

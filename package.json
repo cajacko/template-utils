@@ -31,6 +31,7 @@
     "is-git-repository": "^1.1.1",
     "lodash": "^4.17.10",
     "react-dev-utils": "^5.0.2",
+    "semver": "^5.5.1",
     "simple-git": "^1.96.0"
   },
   "devDependencies": {
