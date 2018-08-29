@@ -3,7 +3,10 @@ import unlinkAllNameSpacedDependencies from './linking/unlinkAllNameSpacedDepend
 import runCommandInLocalNameSpacedModules from './runCommandInLocalNameSpacedModules';
 import runCommand from './runCommand';
 import { set as setSettings, get as getSettings } from './settings';
+import getShouldUpdatePackage from './getShouldUpdatePackage';
+import git from './git';
 
+export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 export {
@@ -13,4 +16,6 @@ export {
   runCommand,
   setSettings,
   getSettings,
+  getShouldUpdatePackage,
+  git,
 };

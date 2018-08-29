@@ -2,10 +2,19 @@
 
 import getIsGit from 'is-git-repository';
 
-export const isGitRepo = (dir) => {
-  const isGit = getIsGit(dir);
+const git = {
+  isGitRepo: (dir) => {
+    const isGit = getIsGit(dir);
 
-  if (isGit) return Promise.resolve();
+    if (isGit) return Promise.resolve();
 
-  return Promise.reject(new Error(`Supplied directory is not a git repo: ${dir}`));
+    return Promise.reject(new Error(`Supplied directory is not a git repo: ${dir}`));
+  },
+  getLastVersionTag: dir => Promise.resolve('v1.0.0'),
+  getAllCommitsSinceTag: (dir, tag) => Promise.resolve([{}]),
+  commit: (dir, message) => Promise.resolve(),
+  push: dir => Promise.resolve(),
+  tag: (dir, tag, message) => Promise.resolve(),
 };
+
+export default git;
