@@ -14,7 +14,9 @@ export const setProjectDir = (dir) => {
 export const getProjectDir = () => Promise.resolve(projectDir);
 
 export const getProjectConfig = () =>
-  getProjectDir().then(dir => readJSON(join(dir, 'project.json')));
+  getProjectDir()
+    .then(dir => readJSON(join(dir, 'project.json')))
+    .catch(() => null);
 
 export const getProjectEnv = env =>
   getProjectDir().then(dir => getEnv(dir, env));

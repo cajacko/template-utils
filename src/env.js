@@ -39,5 +39,5 @@ export const get = (dir, env) => {
 
       return envObj;
     })
-    .catch(() => envObj);
+    .catch(() => ({ NO_ENV_FILE: true, ...envObj }));
 };
