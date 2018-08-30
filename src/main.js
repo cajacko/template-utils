@@ -9,12 +9,14 @@ import logger from './logger';
 import StepRunner from './modules/StepRunner';
 import QueuedFileManagement from './modules/QueuedFileManagement';
 import QueuedNPMManager from './modules/QueuedNPMManager';
+import orderObj from './orderObj';
 
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
+  orderObj,
   linkAllNameSpacedDependencies,
   unlinkAllNameSpacedDependencies,
   runCommandInLocalNameSpacedModules,
