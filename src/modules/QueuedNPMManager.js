@@ -16,14 +16,16 @@ class QueuedNPMManager {
     const nodeModulesCommands = {};
 
     Object.keys(this.nodeModules).forEach((key) => {
-      const { type, version } = this.nodeModules[key];
+      const { type, version, isGitURl } = this.nodeModules[key];
       const finalType = type || 'dependency';
 
       if (!nodeModulesCommands[finalType]) nodeModulesCommands[finalType] = '';
 
+      const packageWithVersion = isGitURl ? key : `${key}@${version}`;
+
       nodeModulesCommands[finalType] = `${
         nodeModulesCommands[finalType]
-      } ${key}@${version}`;
+      } ${packageWithVersion}`;
     });
 
     const promises = [];

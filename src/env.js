@@ -19,10 +19,15 @@ export const get = (dir, env) => {
   return readFile(envFile)
     .then((contents) => {
       const envContents = contents.toString();
+
       const lines = envContents.split('\n');
 
       lines.forEach((line) => {
-        const [full, key, value] = line.match(/(.*?)=(.*)/);
+        const match = line.match(/(.*?)=(.*)/);
+
+        if (!match) return;
+
+        const [full, key, value] = match;
 
         switch (value) {
           case 'true':
@@ -39,5 +44,5 @@ export const get = (dir, env) => {
 
       return envObj;
     })
-    .catch(() => ({ NO_ENV_FILE: true, ...envObj }));
+    .catch(() => ({ NO_ENV_FILE: true }));
 };
