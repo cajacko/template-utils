@@ -44,6 +44,10 @@ const git = {
     return g.push(remote).then(() => g.pushTags(remote));
   },
   tag: (dir, tag, message) => simpleGit(dir).addAnnotatedTag(tag, message),
+  hasUncommitedChanges: dir =>
+    simpleGit(dir)
+      .status()
+      .then(({ files }) => !!files.length),
 };
 
 export default git;
