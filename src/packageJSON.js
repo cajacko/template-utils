@@ -6,15 +6,15 @@ import { join } from 'path';
 export const getPackageJSONFromDir = dir => readJSON(join(dir, 'package.json'));
 
 export const getNamespacedPackagesFromObj = (obj, namespace) => {
-  if (!obj) return {};
-
   const packages = [];
 
-  Object.keys(obj).forEach((packageName) => {
-    if (!packageName.startsWith(`@${namespace}`)) return;
+  if (obj) {
+    Object.keys(obj).forEach((packageName) => {
+      if (!packageName.startsWith(`@${namespace}`)) return;
 
-    if (!packages.includes(packageName)) packages.push(packageName);
-  });
+      if (!packages.includes(packageName)) packages.push(packageName);
+    });
+  }
 
   return packages;
 };
@@ -26,6 +26,8 @@ export const getAllPackagesWithNameSpace = (
   const packages = [];
 
   const addTo = (obj) => {
+    if (!obj) return;
+
     getNamespacedPackagesFromObj(obj, namespace).forEach((packageName) => {
       if (!packages.includes(packageName)) packages.push(packageName);
     });
