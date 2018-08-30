@@ -6,10 +6,14 @@ import { set as setSettings, get as getSettings } from './settings';
 import getShouldUpdatePackage from './getShouldUpdatePackage';
 import git from './git';
 import logger from './logger';
+import StepRunner from './modules/StepRunner';
+import QueuedFileManagement from './modules/QueuedFileManagement';
+import QueuedNPMManager from './modules/QueuedNPMManager';
 
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
+
 export {
   linkAllNameSpacedDependencies,
   unlinkAllNameSpacedDependencies,
@@ -20,4 +24,7 @@ export {
   getShouldUpdatePackage,
   git,
   logger,
+  StepRunner,
+  QueuedFileManagement,
+  QueuedNPMManager,
 };
