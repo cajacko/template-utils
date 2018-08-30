@@ -6,8 +6,11 @@ import copyTmpl from '../copyTmpl';
 import promiseQueue from '../promiseQueue';
 
 class QueuedFileManagement {
-  constructor() {
+  constructor(tmplPath, destPath) {
     this.filesToWrite = {};
+
+    if (tmplPath) this.setTmplPath(tmplPath);
+    if (destPath) this.setDestPath(destPath);
 
     this.write = this.write.bind(this);
   }
