@@ -1,6 +1,6 @@
 import spawn from 'react-dev-utils/crossSpawn';
 
-const runCommand = (command, cwd = process.cwd(), opts) =>
+const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
   new Promise((resolve, reject) => {
     try {
       const commands = command.split(' ').filter(string => string !== '');
@@ -8,11 +8,13 @@ const runCommand = (command, cwd = process.cwd(), opts) =>
 
       process.chdir(cwd);
 
+      const { noLog, ...opts } = optsArg;
+
       const options = Object.assign(
         {
-          stdio: 'inherit',
+          stdio: noLog ? 'ignore' : 'inherit',
         },
-        opts || {},
+        opts,
       );
 
       if (!options.cwd) {
