@@ -1,11 +1,10 @@
 // @flow
 
-import git from './git';
+import { getLastVersionTag, getAllCommitsSinceTag } from './git';
 
 const getShouldUpdatePackage = dir =>
-  git
-    .getLastVersionTag(dir)
-    .then(tag => git.getAllCommitsSinceTag(dir, tag))
+  getLastVersionTag(dir)
+    .then(tag => getAllCommitsSinceTag(dir, tag))
     .then(commits => !!commits.length);
 
 export default getShouldUpdatePackage;

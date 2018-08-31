@@ -7,7 +7,7 @@ import {
   getAllPackagesWithNameSpace,
 } from '../packageJSON';
 import ask from '../ask';
-import git from '../git';
+import { isGitRepo } from '../git';
 import isDirNPMPackage from '../conditionals/isDirNPMPackage';
 
 const getAllNameSpacedPackagesToLink = (nameSpace, startingDir) => {
@@ -45,7 +45,7 @@ const getAllNameSpacedPackagesToLink = (nameSpace, startingDir) => {
                     pathExists(path)
                       .then(() =>
                         Promise.all([
-                          git.isGitRepo(path),
+                          isGitRepo(path),
                           isDirNPMPackage(path, packageName),
                         ]))
                       .then(() => true)
