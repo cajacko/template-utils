@@ -26,7 +26,7 @@ const ensureLocalNPMPackagePath = (packageName, localNPMPackagePaths) => {
   if (localNPMPackagePaths) {
     const path = localNPMPackagePaths[packageName];
 
-    if (path) return Promise.resolve(packageName);
+    if (path) return Promise.resolve(path);
 
     return askForPath(packageName);
   }
