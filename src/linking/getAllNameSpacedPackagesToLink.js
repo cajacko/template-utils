@@ -1,14 +1,11 @@
 // @flow
 
-import { pathExists } from 'fs-extra';
-import { get as getLocalSettings, set as setLocalSettings } from '../settings';
+import { get as getLocalSettings } from '../settings';
 import {
   getPackageJSONFromDir,
   getAllPackagesWithNameSpace,
 } from '../packageJSON';
-import ask from '../ask';
-import { isGitRepo } from '../git';
-import isDirNPMPackage from '../conditionals/isDirNPMPackage';
+import ensureLocalNPMPackagePath from './ensureLocalNPMPackagePath';
 
 const getAllNameSpacedPackagesToLink = (nameSpace, startingDir) => {
   const packagesToLinkByDir = {};
@@ -27,37 +24,14 @@ const getAllNameSpacedPackagesToLink = (nameSpace, startingDir) => {
             packagesToLinkByDir[dir] = packagesToLink;
 
             const getPackageToLinkPath = (packageName) => {
-              let packagePath = allPackagesToLink[packageName];
+              const packagePath = allPackagesToLink[packageName];
 
               if (packagePath) return Promise.resolve(packagePath);
 
-              packagePath = localNPMPackagePaths[packageName];
-
-              let promise;
-
-              if (packagePath) {
-                promise = Promise.resolve(packagePath);
-              } else {
-                promise = ask({
-                  type: 'path',
-                  message: `Enter the absolute path to the local version of ${packageName}`,
-                  validate: path =>
-                    pathExists(path)
-                      .then(() =>
-                        Promise.all([
-                          isGitRepo(path),
-                          isDirNPMPackage(path, packageName),
-                        ]))
-                      .then(() => true)
-                      .catch(({ message }) => message),
-                }).then(newPackagePath =>
-                  setLocalSettings(newPackagePath, [
-                    'localNPMPackagePaths',
-                    packageName,
-                  ]).then(() => newPackagePath));
-              }
-
-              return promise.then((finalPackagePath) => {
+              return ensureLocalNPMPackagePath(
+                packageName,
+                localNPMPackagePaths,
+              ).then((finalPackagePath) => {
                 allPackagesToLink[packageName] = finalPackagePath;
               });
             };
