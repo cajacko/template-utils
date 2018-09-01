@@ -14,12 +14,14 @@ import orderObj from './orderObj';
 import copyTmpl from './copyTmpl';
 import copyDependencies from './copyDependencies';
 import copyAndWatch from './copyAndWatch';
+import ask from './ask';
 
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
+  ask,
   getLastLocalModuleVersion,
   copyDependencies,
   copyAndWatch,
