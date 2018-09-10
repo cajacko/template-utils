@@ -1,6 +1,6 @@
 // @flow
 
-import { copy, ensureFile, pathExists, writeJSON } from 'fs-extra';
+import { copy, ensureFile, pathExists, writeJSON, writeFile } from 'fs-extra';
 import { join } from 'path';
 import copyTmpl from '../copyTmpl';
 import promiseQueue from '../promiseQueue';
@@ -51,16 +51,22 @@ class QueuedFileManagement {
 
     Object.keys(this.filesToWrite).forEach((dest) => {
       const {
-        onlyIfDoesNotExist, path, variables, json,
-      } = this.filesToWrite[
-        dest
-      ];
+        onlyIfDoesNotExist,
+        path,
+        variables,
+        json,
+        contents,
+      } = this.filesToWrite[dest];
 
       const promise = () =>
         this.conditionallyCheckIfExists(dest, onlyIfDoesNotExist, () =>
           ensureFile(dest).then(() => {
             if (json) {
               return writeJSON(dest, json, { spaces: 2 });
+            }
+
+            if (contents) {
+              return writeFile(dest, contents);
             }
 
             if (variables) {
@@ -111,6 +117,14 @@ class QueuedFileManagement {
 
     this.filesToWrite[dest] = {
       json,
+    };
+  }
+
+  writeFile(relativeDest, contents) {
+    const dest = this.getDestPath(relativeDest);
+
+    this.filesToWrite[dest] = {
+      contents,
     };
   }
 
