@@ -8,20 +8,40 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
 
       process.chdir(cwd);
 
-      const { noLog, logError, ...opts } = optsArg;
+      const {
+        noLog, logError, onData, getKill, ...opts
+      } = optsArg;
 
-      const options = Object.assign(
-        {
-          stdio: noLog ? 'ignore' : 'inherit',
-        },
-        opts,
-      );
+      let stdio;
+
+      if (onData) {
+        stdio = undefined;
+      } else if (noLog) {
+        stdio = 'ignore';
+      } else {
+        stdio = 'inherit';
+      }
+
+      const options = Object.assign({ stdio }, opts);
 
       if (!options.cwd) {
         options.cwd = cwd;
       }
 
       const ls = spawn(firstCommand, commands, options);
+
+      if (getKill) {
+        getKill(() => {
+          resolve();
+          ls.kill();
+        });
+      }
+
+      if (onData) {
+        ls.stdout.on('data', (string) => {
+          onData(string);
+        });
+      }
 
       ls.on('error', (e) => {
         if (logError !== false) {
