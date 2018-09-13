@@ -8,7 +8,7 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
 
       process.chdir(cwd);
 
-      const { noLog, ...opts } = optsArg;
+      const { noLog, logError, ...opts } = optsArg;
 
       const options = Object.assign(
         {
@@ -23,9 +23,16 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
 
       const ls = spawn(firstCommand, commands, options);
 
+      ls.on('error', (e) => {
+        if (logError !== false) {
+          console.error(`runCommand error for "${command}"\nIn "${cwd}"`);
+          console.error(e);
+        }
+      });
+
       ls.on('close', (code) => {
         if (code) {
-          reject(new Error(`child process exited with code ${code}`));
+          reject(new Error(`runCommand rejected for "${command}"\nIn "${cwd}"\n child process exited with code ${code}\nCheck logs for more info`));
         } else {
           resolve();
         }

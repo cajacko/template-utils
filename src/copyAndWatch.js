@@ -3,6 +3,17 @@
 import watch from 'watch';
 import { copy, remove } from 'fs-extra';
 
+const withExitOnErrorWrap = exitOnError => (callback) => {
+  try {
+    callback();
+  } catch (e) {
+    if (exitOnError) {
+      console.error(e);
+      process.exit(1);
+    }
+  }
+};
+
 const files = {};
 
 class File {
@@ -72,7 +83,9 @@ const removeFile = (file, src, dest) => {
 };
 
 const copyAndWatch = (src, dest, options = {}) => {
-  const { skipCopy, ignore } = options;
+  const { skipCopy, ignore, exitOnError } = options;
+
+  const withExitOnError = withExitOnErrorWrap(exitOnError);
 
   const ifNotIgnore = (f, callback) => {
     let shouldIgnore = false;
@@ -91,25 +104,35 @@ const copyAndWatch = (src, dest, options = {}) => {
   const watchFunc = () => {
     console.log(`sync: "${src}" with "${dest}"`);
 
-    watch.createMonitor(src, (monitor) => {
-      monitor.on('created', (f) => {
-        ifNotIgnore(f, () => {
-          console.log(`created: ${f}`);
-          copyFile(f, src, dest);
-        });
-      });
+    withExitOnError(() => {
+      watch.createMonitor(src, (monitor) => {
+        withExitOnError(() => {
+          monitor.on('created', (f) => {
+            ifNotIgnore(f, () => {
+              withExitOnError(() => {
+                console.log(`created: ${f}`);
+                copyFile(f, src, dest);
+              });
+            });
+          });
 
-      monitor.on('changed', (f) => {
-        ifNotIgnore(f, () => {
-          console.log(`changed: ${f}`);
-          copyFile(f, src, dest);
-        });
-      });
+          monitor.on('changed', (f) => {
+            ifNotIgnore(f, () => {
+              withExitOnError(() => {
+                console.log(`changed: ${f}`);
+                copyFile(f, src, dest);
+              });
+            });
+          });
 
-      monitor.on('removed', (f) => {
-        ifNotIgnore(f, () => {
-          console.log(`removed: ${f}`);
-          removeFile(f, src, dest);
+          monitor.on('removed', (f) => {
+            ifNotIgnore(f, () => {
+              withExitOnError(() => {
+                console.log(`removed: ${f}`);
+                removeFile(f, src, dest);
+              });
+            });
+          });
         });
       });
     });
