@@ -128,6 +128,15 @@ class QueuedFileManagement {
     };
   }
 
+  writeFileIfDoesNotExist(relativeDest, contents) {
+    const dest = this.getDestPath(relativeDest);
+
+    this.filesToWrite[dest] = {
+      contents,
+      onlyIfDoesNotExist: true,
+    };
+  }
+
   copy(srcArg, destArg) {
     const { src, dest } = this.getPaths(srcArg, destArg);
 

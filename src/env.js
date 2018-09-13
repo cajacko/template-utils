@@ -46,3 +46,15 @@ export const get = (dir, env) => {
     })
     .catch(() => ({ NO_ENV_FILE: true }));
 };
+
+export const parseEnvFromJSON = (obj) => {
+  let contents = '';
+
+  Object.keys(obj).forEach((key) => {
+    const val = obj[key];
+
+    contents = `${contents}${key}=${String(val)}\n`;
+  });
+
+  return contents;
+};

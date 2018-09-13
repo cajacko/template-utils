@@ -15,6 +15,7 @@ import copyTmpl from './copyTmpl';
 import copyDependencies from './copyDependencies';
 import copyAndWatch from './copyAndWatch';
 import ask from './ask';
+import { parseEnvFromJSON } from './env';
 
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
 export { registerCommand, processCommands } from './commands';
@@ -22,21 +23,22 @@ export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
   ask,
-  getLastLocalModuleVersion,
-  copyDependencies,
   copyAndWatch,
+  copyDependencies,
   copyTmpl,
-  orderObj,
-  linkAllNameSpacedDependencies,
-  unlinkAllNameSpacedDependencies,
-  runCommandInLocalNameSpacedModules,
-  runCommand,
-  setSettings,
+  getLastLocalModuleVersion,
   getSettings,
   getShouldUpdatePackage,
   git,
+  linkAllNameSpacedDependencies,
   logger,
-  StepRunner,
+  orderObj,
+  parseEnvFromJSON,
   QueuedFileManagement,
   QueuedNPMManager,
+  runCommand,
+  runCommandInLocalNameSpacedModules,
+  setSettings,
+  StepRunner,
+  unlinkAllNameSpacedDependencies,
 };
