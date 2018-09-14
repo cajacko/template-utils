@@ -4,7 +4,7 @@ import { join } from 'path';
 import { readFile } from 'fs-extra';
 
 export const get = (dir, env) => {
-  const envObj = {};
+  const envObj = process.env;
   let envFile;
 
   switch (env) {
@@ -44,7 +44,10 @@ export const get = (dir, env) => {
 
       return envObj;
     })
-    .catch(() => ({ NO_ENV_FILE: true }));
+    .catch(() => {
+      envObj.NO_ENV_FILE = true;
+    })
+    .then(() => envObj);
 };
 
 export const parseEnvFromJSON = (obj) => {
