@@ -31,9 +31,9 @@ export class Logger {
 
     const { consoleFunc, color } = this.levels[level];
 
-    const error = message instanceof Error && message;
+    const finalMessage = message instanceof Error ? message.stack : message;
 
-    const formattedMessage = color(error || `@CJ ${message}`);
+    const formattedMessage = color(`@CJ ${finalMessage}`);
 
     if (options && options.stdout) {
       process.stdout.write(formattedMessage);
