@@ -2,13 +2,14 @@
 
 import watch from 'watch';
 import { copy, remove } from 'fs-extra';
+import logger from './logger';
 
 const withExitOnErrorWrap = exitOnError => (callback) => {
   try {
     callback();
   } catch (e) {
     if (exitOnError) {
-      console.error(e);
+      logger.error(e);
       process.exit(1);
     }
   }
@@ -102,7 +103,7 @@ const copyAndWatch = (src, dest, options = {}) => {
   };
 
   const watchFunc = () => {
-    console.log(`sync: "${src}" with "${dest}"`);
+    logger.debug(`@sync "${src}" with "${dest}"`);
 
     withExitOnError(() => {
       watch.createMonitor(src, (monitor) => {
@@ -110,7 +111,7 @@ const copyAndWatch = (src, dest, options = {}) => {
           monitor.on('created', (f) => {
             ifNotIgnore(f, () => {
               withExitOnError(() => {
-                console.log(`created: ${f}`);
+                logger.debug(`@sync - created: ${f}`);
                 copyFile(f, src, dest);
               });
             });
@@ -119,7 +120,7 @@ const copyAndWatch = (src, dest, options = {}) => {
           monitor.on('changed', (f) => {
             ifNotIgnore(f, () => {
               withExitOnError(() => {
-                console.log(`changed: ${f}`);
+                logger.debug(`@sync - changed: ${f}`);
                 copyFile(f, src, dest);
               });
             });
@@ -128,7 +129,7 @@ const copyAndWatch = (src, dest, options = {}) => {
           monitor.on('removed', (f) => {
             ifNotIgnore(f, () => {
               withExitOnError(() => {
-                console.log(`removed: ${f}`);
+                logger.debug(`@sync - removed: ${f}`);
                 removeFile(f, src, dest);
               });
             });

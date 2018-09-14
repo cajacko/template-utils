@@ -1,4 +1,5 @@
 import spawn from 'react-dev-utils/crossSpawn';
+import logger from './logger';
 
 let id = 0;
 
@@ -12,6 +13,16 @@ export const killAll = (shouldResolve) => {
 
 const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
   new Promise((resolve, reject) => {
+    const logs = [];
+
+    const logLogs = () => {
+      logs.forEach(({ type, message }) => {
+        const log = type === 'error' ? logger.error : logger.debug;
+
+        log(`child log: ${message}`, undefined, { stdout: true });
+      });
+    };
+
     const thisID = id;
     id += 1;
 
@@ -27,10 +38,8 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
 
       let stdio;
 
-      if (onData) {
+      if (onData || noLog) {
         stdio = undefined;
-      } else if (noLog) {
-        stdio = 'ignore';
       } else {
         stdio = 'inherit';
       }
@@ -64,16 +73,22 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
         });
       }
 
-      if (onData) {
+      if (stdio === undefined) {
         ls.stdout.on('data', (string) => {
-          onData(string);
+          logs.push({ type: 'log', message: String(string) });
+          if (onData) onData(string);
+        });
+
+        ls.stderr.on('data', (string) => {
+          logs.push({ type: 'error', message: String(string) });
+          if (onData) onData(string);
         });
       }
 
       ls.on('error', (e) => {
         if (logError !== false) {
-          console.error(`runCommand error for "${command}"\nIn "${cwd}"`);
-          console.error(e);
+          logger.error(`runCommand error for "${command}"\nIn "${cwd}"`);
+          logger.error(e);
         }
       });
 
@@ -81,12 +96,14 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
         delete all[thisID];
 
         if (code) {
+          logLogs();
           reject(new Error(`runCommand rejected for "${command}"\nIn "${cwd}"\n child process exited with code ${code}\nCheck logs for more info`));
         } else {
           resolve();
         }
       });
     } catch (e) {
+      logLogs();
       delete all[thisID];
       reject(e);
     }
