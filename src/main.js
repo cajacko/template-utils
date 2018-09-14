@@ -2,7 +2,7 @@ import linkAllNameSpacedDependencies from './linking/linkAllNameSpacedDependenci
 import unlinkAllNameSpacedDependencies from './linking/unlinkAllNameSpacedDependencies';
 import getLastLocalModuleVersion from './linking/getLastLocalModuleVersion';
 import runCommandInLocalNameSpacedModules from './runCommandInLocalNameSpacedModules';
-import runCommand from './runCommand';
+import runCommand, { killAll as killAllCommands } from './runCommand';
 import { set as setSettings, get as getSettings } from './settings';
 import getShouldUpdatePackage from './getShouldUpdatePackage';
 import * as git from './git';
@@ -22,6 +22,7 @@ export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
+  killAllCommands,
   ask,
   copyAndWatch,
   copyDependencies,
