@@ -44,7 +44,7 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
         stdio = 'inherit';
       }
 
-      const options = Object.assign({ stdio }, opts);
+      const options = Object.assign({ stdio, env: process.env }, opts);
 
       if (!options.cwd) {
         options.cwd = cwd;
