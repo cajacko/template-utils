@@ -4,7 +4,7 @@ import { join } from 'path';
 import { readFile } from 'fs-extra';
 
 export const get = (dir, env) => {
-  const envObj = process.env;
+  const envObj = Object.assign({}, process.env);
   let envFile;
 
   switch (env) {
