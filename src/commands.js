@@ -11,11 +11,7 @@ export const registerCommand = (command, callback, { options } = {}) => {
     });
   }
 
-  return programCommand.action((...args) =>
-    callback(...args).catch((e) => {
-      console.error(e);
-      process.exit(1);
-    }));
+  return programCommand.action((...args) => callback(...args));
 };
 
 export const processCommands = argv => program.parse(argv);
