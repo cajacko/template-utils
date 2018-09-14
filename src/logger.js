@@ -31,16 +31,24 @@ export class Logger {
 
     const { consoleFunc, color } = this.levels[level];
 
-    const finalMessage = message instanceof Error ? message.stack : message;
+    let finalMessage = message;
+    let finalData = data;
+
+    if (message instanceof Error) {
+      finalMessage = message.stack;
+    } else if (typeof message === 'object') {
+      finalMessage = 'Data';
+      finalData = data === undefined ? message : [message, data];
+    }
 
     const formattedMessage = color(`@CJ ${finalMessage}`);
 
     if (options && options.stdout) {
       process.stdout.write(formattedMessage);
-      if (data !== undefined) consoleFunc(data);
+      if (finalData !== undefined) consoleFunc(finalData);
     } else {
       const args = [formattedMessage];
-      if (data !== undefined) args.push(data);
+      if (finalData !== undefined) args.push(finalData);
       consoleFunc(...args);
     }
   }
