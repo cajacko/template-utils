@@ -15,6 +15,7 @@ import copyTmpl from './copyTmpl';
 import copyDependencies from './copyDependencies';
 import copyAndWatch from './copyAndWatch';
 import ask from './ask';
+import isSymLink from './conditionals/isSymLink';
 import { parseEnvFromJSON } from './env';
 
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
@@ -22,6 +23,7 @@ export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
+  isSymLink,
   killAllCommands,
   ask,
   copyAndWatch,
