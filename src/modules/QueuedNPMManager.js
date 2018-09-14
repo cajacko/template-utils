@@ -37,7 +37,7 @@ class QueuedNPMManager {
 
       command = `${command} ${nodeModulesCommands[key]}`;
 
-      promises.push(() => runCommand(command, this.destPath));
+      promises.push(() => runCommand(command, this.destPath, { noLog: true }));
     });
 
     return promiseQueue(promises);
