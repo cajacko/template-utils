@@ -35,10 +35,12 @@ export const getAllCommitsSinceTag = (dir, tag) =>
     // .log(`${tag}..HEAD`)
     .then(logs => logs.all);
 
-export const commit = (dir, message) => {
+export const commit = (dir, message, addAll = true) => {
   const g = simpleGit(dir);
 
-  return g.add('-A').then(() => g.commit(message));
+  if (addAll) return g.add('-A').then(() => g.commit(message));
+
+  return g.commit(message);
 };
 
 export const push = (dir, remote = 'origin') => {
@@ -47,10 +49,15 @@ export const push = (dir, remote = 'origin') => {
   return g.push(remote).then(() => g.pushTags(remote));
 };
 
-export const tag = (dir, tag, message) =>
-  simpleGit(dir).addAnnotatedTag(tag, message);
+export const tag = (dir, tagName, message) =>
+  simpleGit(dir).addAnnotatedTag(tagName, message);
 
 export const hasUncommitedChanges = dir =>
   simpleGit(dir)
     .status()
     .then(({ files }) => !!files.length);
+
+export const hasStagedChanges = dir =>
+  simpleGit(dir)
+    .status()
+    .then(({ staged }) => staged.length !== 0);
