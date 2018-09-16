@@ -46,8 +46,6 @@ const runCommand = (command, ...args) =>
         noLog, logError, onData, getKill, vars, ...opts
       } = optsArg;
 
-      logger.log({ vars });
-
       const commands = command
         .split(' ')
         .filter(string => string !== '')
@@ -56,8 +54,6 @@ const runCommand = (command, ...args) =>
 
           return vars[item] || item;
         });
-
-      logger.log({ commands });
 
       const firstCommand = commands.splice(0, 1)[0];
 
