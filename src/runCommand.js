@@ -11,8 +11,23 @@ export const killAll = (shouldResolve) => {
   });
 };
 
-const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
+const runCommand = (command, ...args) =>
   new Promise((resolve, reject) => {
+    let optsArg = {};
+    let cwd = process.cwd();
+
+    if (args[0]) {
+      if (typeof args[0] === 'object') {
+        optsArg = args[0];
+      } else if (typeof args[0] === 'string') {
+        cwd = args[0];
+
+        if (typeof args[1] === 'object') {
+          optsArg = args[1];
+        }
+      }
+    }
+
     const logs = [];
 
     const logLogs = () => {
@@ -27,14 +42,26 @@ const runCommand = (command, cwd = process.cwd(), optsArg = {}) =>
     id += 1;
 
     try {
-      const commands = command.split(' ').filter(string => string !== '');
+      const {
+        noLog, logError, onData, getKill, vars, ...opts
+      } = optsArg;
+
+      logger.log({ vars });
+
+      const commands = command
+        .split(' ')
+        .filter(string => string !== '')
+        .map((item) => {
+          if (!vars) return item;
+
+          return vars[item] || item;
+        });
+
+      logger.log({ commands });
+
       const firstCommand = commands.splice(0, 1)[0];
 
       process.chdir(cwd);
-
-      const {
-        noLog, logError, onData, getKill, ...opts
-      } = optsArg;
 
       let stdio;
 
