@@ -2,6 +2,7 @@
 
 import simpleGit from 'simple-git/promise';
 import getIsGit from 'is-git-repository';
+import logger from './logger';
 
 export const isGitRepo = (dir) => {
   const isGit = getIsGit(dir);
@@ -61,3 +62,18 @@ export const hasStagedChanges = dir =>
   simpleGit(dir)
     .status()
     .then(({ staged }) => staged.length !== 0);
+
+export const getOrigin = dir =>
+  simpleGit(dir)
+    .listRemote(['--get-url'])
+    .then(data => data.trim());
+
+export const getRootDir = dir =>
+  simpleGit(dir)
+    .revparse(['--show-toplevel'])
+    .then(data => data.trim());
+
+export const getCurrentBranch = dir =>
+  simpleGit(dir)
+    .branch()
+    .then(({ current }) => current);
