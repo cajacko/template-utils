@@ -36,10 +36,12 @@ export const getAllCommitsSinceTag = (dir, tag) =>
     // .log(`${tag}..HEAD`)
     .then(logs => logs.all);
 
+export const stageAll = dir => simpleGit(dir).add('-A');
+
 export const commit = (dir, message, addAll = true) => {
   const g = simpleGit(dir);
 
-  if (addAll) return g.add('-A').then(() => g.commit(message));
+  if (addAll) return stageAll(dir).then(() => g.commit(message));
 
   return g.commit(message);
 };
@@ -77,3 +79,10 @@ export const getCurrentBranch = dir =>
   simpleGit(dir)
     .branch()
     .then(({ current }) => current);
+
+export const hasUnstagedChanges = dir =>
+  simpleGit(dir)
+    .status()
+    .then(({ files }) =>
+      files.filter(({ working_dir }) => working_dir.trim() !== '').length !==
+        0);
