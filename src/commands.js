@@ -2,7 +2,12 @@
 
 import program from 'commander';
 
-export const registerCommand = (command, callback, { options } = {}) => {
+export const registerCommand = (
+  command,
+  callback,
+  { options } = {},
+  errorCallback,
+) => {
   const programCommand = program.command(command);
 
   if (options) {
@@ -11,7 +16,12 @@ export const registerCommand = (command, callback, { options } = {}) => {
     });
   }
 
-  return programCommand.action((...args) => callback(...args));
+  return programCommand.action((...args) =>
+    callback(...args).catch((e) => {
+      if (errorCallback) return errorCallback(e);
+
+      throw e;
+    }));
 };
 
 export const processCommands = argv => program.parse(argv);
