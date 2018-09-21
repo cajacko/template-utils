@@ -47,7 +47,7 @@ export const commit = (dir, message, addAll = true, noVerify) => {
 
   if (addAll) return stageAll(dir).then(() => g.commit(message, options));
 
-  return g.commit(message);
+  return g.commit(message, options);
 };
 
 export const push = (dir, remote = 'origin') => {
