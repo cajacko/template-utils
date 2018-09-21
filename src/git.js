@@ -36,10 +36,16 @@ export const getAllCommitsSinceTag = (dir, tag) =>
 
 export const stageAll = dir => simpleGit(dir).add('-A');
 
-export const commit = (dir, message, addAll = true) => {
+export const commit = (dir, message, addAll = true, noVerify) => {
   const g = simpleGit(dir);
 
-  if (addAll) return stageAll(dir).then(() => g.commit(message));
+  const options = {};
+
+  if (noVerify) {
+    options['--no-verify'] = true;
+  }
+
+  if (addAll) return stageAll(dir).then(() => g.commit(message, options));
 
   return g.commit(message);
 };
