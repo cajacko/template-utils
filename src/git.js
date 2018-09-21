@@ -2,7 +2,6 @@
 
 import simpleGit from 'simple-git/promise';
 import getIsGit from 'is-git-repository';
-import logger from './logger';
 
 export const isGitRepo = (dir) => {
   const isGit = getIsGit(dir);
@@ -33,7 +32,6 @@ export const getAllCommitsSinceTag = (dir, tag) =>
       from: tag,
       to: 'HEAD',
     })
-    // .log(`${tag}..HEAD`)
     .then(logs => logs.all);
 
 export const stageAll = dir => simpleGit(dir).add('-A');
@@ -84,5 +82,6 @@ export const hasUnstagedChanges = dir =>
   simpleGit(dir)
     .status()
     .then(({ files }) =>
+    // eslint-disable-next-line camelcase
       files.filter(({ working_dir }) => working_dir.trim() !== '').length !==
         0);
