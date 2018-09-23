@@ -1,4 +1,5 @@
 import spawn from 'react-dev-utils/crossSpawn';
+import { join } from 'path';
 import logger from './logger';
 
 let id = 0;
@@ -18,12 +19,12 @@ const runCommand = (command, ...args) =>
 
     if (args[0]) {
       if (typeof args[0] === 'object') {
-        optsArg = args[0];
+        [optsArg] = args;
       } else if (typeof args[0] === 'string') {
-        cwd = args[0];
+        [cwd] = args;
 
         if (typeof args[1] === 'object') {
-          optsArg = args[1];
+          [, optsArg] = args;
         }
       }
     }
@@ -43,7 +44,13 @@ const runCommand = (command, ...args) =>
 
     try {
       const {
-        noLog, logError, onData, getKill, vars, ...opts
+        noLog,
+        logError,
+        onData,
+        getKill,
+        vars,
+        withNVM,
+        ...opts
       } = optsArg;
 
       const commands = command
@@ -54,6 +61,11 @@ const runCommand = (command, ...args) =>
 
           return vars[item] || item;
         });
+
+      if (withNVM) {
+        commands.unshift(withNVM);
+        commands.unshift(`${join(__dirname, '../scripts/loadWithNVM.sh')}`);
+      }
 
       const firstCommand = commands.splice(0, 1)[0];
 

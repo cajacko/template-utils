@@ -9,7 +9,8 @@
     "prepare": "yarn build"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "scripts/**/*"
   ],
   "repository": "git@github.com:cajacko/template-utils.git",
   "author": "Charlie Jackson <contact@charliejackson.com>",
