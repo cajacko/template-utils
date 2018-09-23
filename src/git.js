@@ -67,7 +67,10 @@ export const hasUncommitedChanges = dir =>
 export const hasStagedChanges = dir =>
   simpleGit(dir)
     .status()
-    .then(({ staged }) => staged.length !== 0);
+    .then(({ staged, files }) =>
+      staged.length !== 0 ||
+        // eslint-disable-next-line camelcase
+        files.some(({ working_dir }) => working_dir.trim() === ''));
 
 export const getOrigin = dir =>
   simpleGit(dir)
