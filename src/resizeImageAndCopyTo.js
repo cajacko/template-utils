@@ -13,7 +13,7 @@ const resizeImageAndCopyTo = (importPath: string, ...resizes) =>
 
     resizes.forEach(({ height, width, outPath }) => {
       const promise = new Promise((resolve, reject) =>
-        image.resize(height, width).write(outPath, (err) => {
+        image.cover(height, width).write(outPath, (err) => {
           if (err) {
             reject(err);
           } else {
