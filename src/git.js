@@ -2,6 +2,7 @@
 
 import simpleGit from 'simple-git/promise';
 import getIsGit from 'is-git-repository';
+import { ensureDir } from 'fs-extra';
 
 export const isGitRepo = (dir) => {
   const isGit = getIsGit(dir);
@@ -94,3 +95,13 @@ export const hasUnstagedChanges = dir =>
     // eslint-disable-next-line camelcase
       files.filter(({ working_dir }) => working_dir.trim() !== '').length !==
         0);
+
+export const clone = (origin, dir) =>
+  ensureDir(dir).then(() => simpleGit().clone(origin, dir));
+
+export const pull = dir => simpleGit(dir).pull();
+
+export const doesBranchExist = (dir, branch) =>
+  simpleGit(dir)
+    .branch()
+    .then(({ all }) => all.includes(branch));
