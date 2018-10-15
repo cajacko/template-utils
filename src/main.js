@@ -18,6 +18,7 @@ import ask from './ask';
 import isSymLink from './conditionals/isSymLink';
 import replaceInFile from './replaceInFile';
 import resizeImageAndCopyTo from './resizeImageAndCopyTo';
+import CertStorage from './modules/CertStorage';
 
 export { parseEnvFromJSON } from './env';
 export { setPackageVersion, askForNewPackageVersion } from './packageVersion';
@@ -25,6 +26,7 @@ export { registerCommand, processCommands } from './commands';
 export { getProjectDir, getProjectConfig, getProjectEnv } from './project';
 
 export {
+  CertStorage,
   resizeImageAndCopyTo,
   replaceInFile,
   isSymLink,
